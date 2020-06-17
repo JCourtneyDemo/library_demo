@@ -1,0 +1,68 @@
+List all books along with location: 
+
+SELECT
+books.book_id, 
+books.title, 
+books.author, 
+books.publish_date,
+books.status,
+book_locations.building, 
+book_locations.bookcase, 
+book_locations.row,  
+ FROM books INNER JOIN book_locations ON books.book_id=book_locations.book_id
+
+---------------------------------------------------------------------------------------
+
+List all lent books, along with member and library location 
+
+SELECT 
+books.book_id, 
+books.title, 
+books.author, 
+book_locations.building, 
+book_locations.bookcase, 
+book_locations.row, 
+members.member_id,
+members.first_name,
+members.last_name,
+members.email,
+members.current_total_books,
+members.overdue_fines_due
+FROM books INNER JOIN book_locations ON books.book_id=book_locations.book_id INNER JOIN book_status 
+ON books.book_id=book_status.book_id INNER JOIN members ON books.member_id=members.member_id 
+WHERE book_status.book_status > 0;
+
+-------------------------------------------------------------
+
+List all books lent by a specified member (name) and when lent. Specify index use (first_name, last_name) 
+
+SELECT 
+members.member_id,
+books.book_id, 
+books.title, 
+books.author, 
+members.book_rental_date,
+members.book_return_date
+ FROM members USE INDEX (first_name, last_name) 
+ INNER JOIN books ON books.member_id=members.member_id 
+ INNER JOIN book_status ON books.book_id=book_status.book_id 
+ WHERE first_name="Jack" AND last_name="Courtney" AND book_status.book_status > 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
